@@ -116,10 +116,10 @@ if __name__ == "__main__":
     # highlight_text(text, ["upper-respiratory tract", "respiratory", "due to", "yaws", "pinta"])
 
     d = json.load(open(os.path.join(DATA_DIR, "ema.json")))
-    f = open("tmp.csv", "w")
+    f = open("questions.csv", "w")
     writer = csv.writer(f)
     writer.writerow(["medicine_name","common_name","wdid","indication","diseases"])
-    for record in d[:10]:
+    for record in d[:30]:
         record['indication_html'] = highlight_text(record['Indication'], record['diseases'])
         #print(json.dumps(record, indent=2))
         # "http://purl.obolibrary.org/obo/DOID_9351|diabetes mellitus (diabetes, adf);http://purl.obolibrary.org/obo/DOID_2222|khkhsd"

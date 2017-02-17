@@ -108,17 +108,25 @@ def get_mixture_rxcui_from_parts(rxcuis):
     Given a set of ingredient rxcui, get the MIN rxcui
     :param rxcuis:
     :return:
+
+    # http://bioportal.bioontology.org/ontologies/RXNORM?p=classes&conceptid=http%3A%2F%2Fpurl.bioontology.org%2Fontology%2FRXNORM%2F1602583
+    # https://www.nlm.nih.gov/research/umls/rxnorm/docs/2015/appendix5.html
     """
-    url = "https://rxnav.nlm.nih.gov/REST/rxcui/{}/related.json?rela=part_of"
+    url = "https://rxnav.nlm.nih.gov/REST/rxcui/{}/related.json?rela=part_of+precise_ingredient_of"
     min_rxcuis = []
     for rxcui in rxcuis:
         d = requests.get(url.format(rxcui)).json()['relatedGroup']
         if 'conceptGroup' not in d:
             return None
-        d = d['conceptGroup'][0]
-        assert d['tty'] == "MIN"
-        min_rxcuis.append(set([x['rxcui'] for x in d['conceptProperties']]))
-    #print(min_rxcuis)
+        cg = [x for x in d['conceptGroup'] if x['tty'] in {'BN', 'MIN'}]
+        if not cg:
+            return None
+        if len(cg)>1:
+            print("help!")
+        min_rxcuis.append(set([x['rxcui'] for x in cg[0]['conceptProperties']]))
+    print(min_rxcuis)
     min_rxcui = list(set.intersection(*min_rxcuis))
-    assert len(min_rxcui) == 1
-    return min_rxcui[0]
+    if len(min_rxcui) != 1:
+        return None
+    else:
+        return min_rxcui[0]

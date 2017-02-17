@@ -1,30 +1,43 @@
-<style type="text/css">
-.disease{
-  font-size:20px;
-  color: #909729;
-  font-weight: bold;
-}
-table{
-  border-spacing: 10px;
-  width:100%;
-}
-</style>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
 
-<h3>Read this passage of text:</h3>
-
-<div class="header">
-    <div class="medicine_name">{{medicine_name}}</div>
-    <div class="common_name">{{common_name}}</div>
+<h1><div class="medicine_name">{{medicine_name}}</div></h1><h3><div class="common_name">{{common_name}}</div></h3>
     <div class="wdid"><a href="https://www.wikidata.org/wiki/{{wdid}}">{{wdid}}</a></div>
-</div>
+<br>
+<h3>Indications: </h3>
 <div class="indication">
     {{indication}}
 </div>
 
-<cml:checkboxes name="disease_suggestions" label="Please select if indicated" validates="required">
-    {% for disease in diseases %}
-    {% assign array = disease | split: "|" %}
-    <cml:checkbox value="{{array[0]}}" label="{{array[1]}}"/>
-    {% endfor %}
-</cml:checkboxes>
+<cml:radios label="Are all highlighted terms truly indications of this drug?">
+  <cml:radio label="Yes" />
+  <cml:radio label="No" />
+</cml:radios>
 
+<cml:radios label="Are all indications in the text highlighted?">
+  <cml:radio label="Yes" />
+  <cml:radio label="No" />
+</cml:radios>
+
+<cml:checkboxes name="modifiers" label="Does this text contain any of the following?" validates="required">
+    <cml:checkbox label="Genetic Modifier" value="genetic"/>
+    <cml:checkbox label="Clinical Modifier" value="clinical"/>
+    <cml:checkbox label="Indication Type" value="indication_subtype"/>
+    <cml:checkbox label="Patient Modifier" value="patient"/>
+    <cml:checkbox label="Treatment Combination" value="treatment"/>
+    <cml:checkbox label="None of the above" value="none"/>
+</cml:checkboxes>
+<a target="_blank" class="genetic">Genetic modifier <i class="icon-info-sign"/></a>
+<a target="_blank" class="clinical">Clinical modifier <i class="icon-info-sign"/></a>
+<a target="_blank" class="indication_subtype">Indication Type <i class="icon-info-sign"/></a>
+<a target="_blank" class="patient">Patient Modifier <i class="icon-info-sign"/></a>
+<a target="_blank" class="treatment">Treatment Combination <i class="icon-info-sign"/></a>
+
+<cml:checkboxes name="problems" label="There is some problem with this text:" validates="required">
+    <cml:checkbox label="This text does not contain drug indications" value="no_indications"/>
+    <cml:checkbox label="This drug is not indicated for the treatment, prevention, management, or diagnosis of any diseases" value="no_diseases"/>
+    <cml:checkbox label="I don't understand this text" value="dont_understand"/>
+    <cml:checkbox label="Some other problem" value="problem"/>
+    <cml:checkbox label="None of the above" value="none"/>
+</cml:checkboxes>
