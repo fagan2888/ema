@@ -17,8 +17,7 @@ or use this:
 
 ### attempt to match up drug names/atc codes
 * run `drugs.py`
-* look up in wikidata using only 7 digit ATC codes
-* for those missing, match strings to who_name, label, or aliases from wikidata
+* match strings to who_name, label, or aliases from wikidata
 * for mixtures, search also by strings
 * get rxcui's for those found
 * query for rxcui mixtures
@@ -27,3 +26,4 @@ or use this:
 * run `parse_indications.py`
 * string matches to mesh terms
 * match to DO or HPO uses xrefs
+

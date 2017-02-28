@@ -60,20 +60,23 @@ def get_drug_qid_map():
 
 df = pd.read_csv("ema_indications_merged.csv", index_col=0)
 
-"""
 ema_atc = set(list(df['atc'].dropna().str.strip()))
 
 # look up wdid by ATC code (using 7 digit codes only)
 atc_wd = wdi_helpers.id_mapper("P267")  # ATC code
 atc_wd_ema = {atc: atc_wd[atc] for atc in ema_atc if len(atc)== 7 and atc in atc_wd}
-df['wdid'] = df['atc'].apply(atc_wd_ema.get)
-"""
-df['wdid'] = None
-# search by name
+df['atc_wdid'] = df['atc'].apply(atc_wd_ema.get)
+
+# search by name, then by active substance
 #drug_qid_map = get_drug_qid_map()
 drug_qid_map = pickle.load(open(os.path.join(DATA_DIR, "drug_qid_map.pkl"), 'rb'))
-wdid_search_name = df[df['wdid'].isnull()]['Active substance'].apply(drug_qid_map.get).dropna()
+
+wdid_search_name = df.Name.str.lower().apply(drug_qid_map.get).dropna()
 df.loc[wdid_search_name.index, "wdid"] = wdid_search_name
+
+wdid_search_as = df[df['wdid'].isnull()]['Active substance'].str.lower().apply(drug_qid_map.get).dropna()
+df.loc[wdid_search_as.index, "wdid"] = wdid_search_as
+
 
 # search mixures by name
 def get_mixtures(drugs):
