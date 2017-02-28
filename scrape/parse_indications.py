@@ -2,8 +2,6 @@ import os
 from itertools import chain
 import pandas as pd
 import json
-from collections import defaultdict
-from ema.utils import get_names_synonyms_doid, get_doid_names, clean_text, contains_word
 DATA_DIR = "../data"
 
 df = pd.read_csv("ema_indications_merged_drug.csv", index_col=0)
